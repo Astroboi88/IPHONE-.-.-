@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPINE IPHONE WORLDWIDE | Premium Tech & Fragrance</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root { 
+            --alpine-blue: #3b82f6; 
+            --alpine-black: #050505; 
+            --whatsapp-green: #25D366;
+        }
+        body { background-color: var(--alpine-black); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+        h1, h2, h3, .brand-font { font-family: 'Syncopate', sans-serif; text-transform: uppercase; }
+        
+        .glass-nav { background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sticky-viewport { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .morph-text { font-size: clamp(2rem, 7vw, 5rem); line-height: 0.9; letter-spacing: -2px; }
+
+        .product-card { 
+            background: #0a0a0a; border: 1px solid #1a1a1a; transition: all 0.4s ease; 
+            opacity: 0; transform: translateY(50px);
+        }
+        .product-card:hover { border-color: var(--alpine-blue); transform: scale(1.02); }
+
+        .form-input { width: 100%; padding: 15px; background: #141414; border: 1px solid #222; border-radius: 12px; color: white; transition: 0.3s; }
+        .form-input:focus { outline: none; border-color: var(--whatsapp-green); }
+
+        .whatsapp-float {
+            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+            background: var(--whatsapp-green); border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; color: black; font-size: 30px;
+            z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(10deg); }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--alpine-blue); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <a href="https://wa.me/27784174780" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+    <nav class="fixed top-0 w-full z-[100] glass-nav py-5 px-6 md:px-12 flex justify-between items-center">
+        <div>
+            <h1 class="text-sm md:text-lg font-bold tracking-widest">ALPINE IPHONE</h1>
+            <p class="text-[8px] text-blue-500 tracking-[0.5em] font-bold">WORLDWIDE EDITION</p>
+        </div>
+        <div class="hidden lg:flex items-center gap-6">
+            <input type="text" id="globalSearch" onkeyup="filterStock()" placeholder="Search Inventory..." 
+                   class="bg-white/5 border border-white/10 rounded-full px-4 py-1 text-xs focus:outline-none focus:border-blue-500 w-48">
+            <div class="flex gap-6 text-[10px] tracking-widest uppercase font-bold">
+                <a href="#showroom" class="hover:text-blue-500">Showroom</a>
+                <a href="#catalog" class="hover:text-blue-500">Stock</a>
+                <a href="#contact" class="hover:text-blue-500">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="showroom" class="scroll-container" style="height: 600vh;">
+        <div class="sticky-viewport">
+            <div id="morph-stage" class="text-center px-4 w-full max-w-5xl">
+                <div class="relative h-64 md:h-96 mb-8">
+                    <img id="morph-img" src="http://googleusercontent.com/image_collection/image_retrieval/12970440005921212457_0" 
+                         class="h-full mx-auto object-contain drop-shadow-[0_0_80px_rgba(59,130,246,0.2)]">
+                </div>
+                <h2 id="morph-name" class="morph-text font-bold mb-4 italic">iPhone 15 Pro Max</h2>
+                <p id="morph-price" class="text-2xl md:text-4xl font-light text-blue-500 mb-8">R18 900</p>
+                <button onclick="directOrder('iPhone 15 Pro Max', '256GB', 18900)" class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-full text-[10px] font-black tracking-widest transition shadow-lg">
+                    ORDER DIRECT VIA WHATSAPP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <section id="catalog" class="py-32 bg-[#050505] border-t border-white/5">
+        <div class="container mx-auto px-6">
+            <div id="catalogHeader" class="mb-20 flex flex-col md:flex-row justify-between items-end gap-6">
+                <div>
+                    <h3 class="brand-font text-5xl mb-4 italic">Inventory</h3>
+                    <p class="text-gray-500 tracking-widest uppercase text-xs italic">Direct Global Logistics</p>
+                </div>
+                <div class="bg-blue-600/10 border border-blue-500/20 p-4 rounded-2xl flex items-center gap-4">
+                    <i class="fas fa-truck-fast text-blue-500"></i>
+                    <span class="text-[10px] uppercase font-bold tracking-widest">Newcastle & Pretoria Delivery Verified</span>
+                </div>
+            </div>
+
+            <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-blue-600/5 border-y border-white/5 text-center">
+        <h4 class="brand-font text-xl mb-10">Alpine Signature Fragrances</h4>
+        <div class="flex justify-center gap-8 flex-wrap px-6">
+            <div class="bg-[#0f0f0f] p-8 rounded-[30px] border border-white/5 w-72">
+                <i class="fas fa-flask text-3xl text-blue-500 mb-4"></i>
+                <p class="font-bold mb-2 uppercase italic">Alpine Oud</p>
+                <p class="text-blue-500 text-xl font-light mb-6">R650</p>
+                <button onclick="directOrder('Alpine Oud', '100ml', 650)" class="text-[10px] border border-white/20 px-6 py-2 rounded-full hover:bg-white hover:text-black transition">Inquire</button>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="py-28 bg-[#080808]">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20">
+            <div>
+                <h3 class="brand-font text-3xl mb-10 italic text-glow">Contact Us</h3>
+                <div class="space-y-8">
+                    <div class="flex items-center gap-6"><i class="fas fa-location-dot text-blue-500 text-xl"></i><span class="text-gray-300">Newcastle, KZN | Pretoria, SA</span></div>
+                    <a href="tel:+27784174780" class="flex items-center gap-6 group"><i class="fas fa-phone text-blue-500 text-xl"></i><span class="text-gray-300">+27 78 417 4780 / +27 63 969 9432</span></a>
+                    <a href="mailto:d14o10c04@gmail.com" class="flex items-center gap-6 group"><i class="fas fa-envelope text-blue-500 text-xl"></i><span class="text-gray-300">d14o10c04@gmail.com</span></a>
+                </div>
+            </div>
+            <div class="bg-[#0f0f0f] p-10 rounded-[40px] border border-white/5">
+                <form id="alpineContactForm">
+                    <input type="text" id="userName" placeholder="Full Name" class="form-input mb-4" required>
+                    <input type="email" id="userEmail" placeholder="Email Address" class="form-input mb-4" required>
+                    <textarea id="userMsg" placeholder="Inquiry Message" rows="4" class="form-input mb-6" required></textarea>
+                    <button type="submit" class="w-full bg-[#25D366] text-black py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition">Submit Inquiry</button>
+                </form>
+            </div>
+        </div>
+        <div class="mt-32 text-center text-[10px] text-gray-700 tracking-[0.5em] uppercase">© 2026 Alpine iPhone Worldwide. Master Script v5.0</div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const WHATSAPP_NUM = "27784174780";
+
+        const fullStock = [
+            { name: "iPhone 15 Pro Max", size: "256GB", price: 18900, img: "http://googleusercontent.com/image_collection/image_retrieval/12970440005921212457_0" },
+            { name: "iPhone 15 Pro", size: "128GB", price: 16900, img: "http://googleusercontent.com/image_collection/image_retrieval/2379726504197719816_0" },
+            { name: "iPhone 14 Pro Max", size: "128GB", price: 15900, img: "http://googleusercontent.com/image_collection/image_retrieval/16744322729102057789_0" },
+            { name: "iPhone 13 Pro Max", size: "128GB", price: 12400, img: "http://googleusercontent.com/image_collection/image_retrieval/13458805555159915105_0" },
+            { name: "iPhone 12 Pro Max", size: "128GB", price: 10900, img: "http://googleusercontent.com/image_collection/image_retrieval/7303812771003049731_0" },
+            { name: "iPhone 11 Pro Max", size: "64GB", price: 7600, img: "http://googleusercontent.com/image_collection/image_retrieval/6193469287934042384_0" },
+            { name: "iPhone 11", size: "64GB", price: 5600, img: "https://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/SP804/iphone11.png" },
+            { name: "iPhone XR", size: "64GB", price: 4600, img: "http://googleusercontent.com/image_collection/image_retrieval/804976628524733130_0" },
+            { name: "iPhone X", size: "64GB", price: 4399, img: "https://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/SP770/iphone-x.png" }
+        ];
+
+        const morphTl = gsap.timeline({ scrollTrigger: { trigger: ".scroll-container", start: "top top", end: "bottom bottom", scrub: 1.5 } });
+        fullStock.forEach((item, i) => {
+            if(i === 0) return;
+            morphTl.to("#morph-stage", { opacity: 0, scale: 0.95, duration: 1 })
+                   .call(() => {
+                        document.getElementById("morph-img").src = item.img;
+                        document.getElementById("morph-name").innerText = item.name;
+                        document.getElementById("morph-price").innerText = `R${item.price.toLocaleString()}`;
+                        document.querySelector('#morph-stage button').onclick = () => directOrder(item.name, item.size, item.price);
+                   })
+                   .to("#morph-stage", { opacity: 1, scale: 1, duration: 1 }).to({}, {duration: 2});
+        });
+
+        function renderStock(list) {
+            const grid = document.getElementById("catalogGrid");
+            grid.innerHTML = list.map((p) => `
+                <div class="product-card p-10 rounded-[40px] flex flex-col group">
+                    <div class="h-44 mb-8 bg-black flex items-center justify-center overflow-hidden rounded-3xl border border-white/5">
+                        <img src="${p.img}" class="h-32 group-hover:scale-110 transition duration-700">
+                    </div>
+                    <h4 class="font-bold text-lg mb-1 italic">${p.name}</h4>
+                    <p class="text-[10px] text-blue-500 tracking-widest uppercase mb-8">${p.size}</p>
+                    <div class="mt-auto pt-6 border-t border-white/5 flex justify-between items-center">
+                        <span class="text-xl font-light">R${p.price.toLocaleString()}</span>
+                        <button onclick="directOrder('${p.name}', '${p.size}', ${p.price})" class="bg-white text-black text-[10px] font-black px-5 py-2 rounded-full hover:bg-blue-600 hover:text-white transition uppercase italic">Secure</button>
+                    </div>
+                </div>
+            `).join('');
+            gsap.to(".product-card", { opacity: 1, y: 0, duration: 1, stagger: 0.15, scrollTrigger: { trigger: "#catalogGrid", start: "top 80%" } });
+        }
+
+        function filterStock() {
+            const q = document.getElementById("globalSearch").value.toLowerCase();
+            const filtered = fullStock.filter(p => p.name.toLowerCase().includes(q));
+            renderStock(filtered);
+        }
+
+        function directOrder(n, s, p) {
+            window.open(`https://wa.me/${WHATSAPP_NUM}?text=Order: ${n} (${s}) for R${p.toLocaleString()} via Alpine Worldwide.`, '_blank');
+        }
+
+        document.getElementById('alpineContactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const text = `*Alpine Global Inquiry*\nName: ${document.getElementById('userName').value}\nEmail: ${document.getElementById('userEmail').value}\nMsg: ${document.getElementById('userMsg').value}`;
+            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(text)}`, '_blank');
+        });
+
+        renderStock(fullStock);
+    </script>
+</body>
+</html>
