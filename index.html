@@ -15,74 +15,90 @@
     <style>
         :root { --alpine-blue: #3b82f6; --alpine-black: #050505; --whatsapp-green: #25D366; }
         [x-cloak] { display: none !important; }
-        body { background-color: var(--alpine-black); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+        
+        body { 
+            background-color: var(--alpine-black); 
+            color: white; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+            scroll-behavior: smooth; 
+        }
+
         h1, h2, h3, .brand-font { font-family: 'Syncopate', sans-serif; text-transform: uppercase; }
         
+        /* Mobile Fix: Ensure visibility by default */
+        .apple-card { 
+            background: #0d0d0d; 
+            border: 1px solid #1a1a1a; 
+            transition: all 0.3s ease;
+            opacity: 1 !important; 
+            transform: none !important; 
+        }
+
         .glass-nav { background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .apple-card { background: #0d0d0d; border: 1px solid #1a1a1a; transition: all 0.3s ease; }
-        .apple-card:hover { border-color: var(--alpine-blue); transform: translateY(-3px); }
         
         /* Table Styling */
-        .price-table { width: 100%; border-collapse: collapse; }
-        .price-table th { text-align: left; padding: 15px; border-bottom: 2px solid #1a1a1a; color: var(--alpine-blue); font-family: 'Syncopate', sans-serif; font-size: 0.65rem; }
+        .price-table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .price-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        .price-table th { text-align: left; padding: 15px; border-bottom: 2px solid #1a1a1a; color: var(--alpine-blue); font-size: 0.7rem; }
         .price-table td { padding: 12px 15px; border-bottom: 1px solid #111; font-size: 0.85rem; }
-        .price-table tr:hover { background: rgba(59, 130, 246, 0.05); }
 
         /* Agreement Document */
-        .agreement-paper { background: #fff; color: #000; padding: 40px; font-family: 'Courier New', monospace; line-height: 1.4; border: 1px solid #ddd; }
+        .agreement-paper { 
+            background: #fff; 
+            color: #000; 
+            padding: 30px; 
+            font-family: 'Courier New', monospace; 
+            font-size: 12px;
+            line-height: 1.4; 
+            border: 1px solid #ddd; 
+        }
+
         .form-input { width: 100%; padding: 12px; background: #141414; border: 1px solid #222; border-radius: 8px; color: white; margin-bottom: 10px; }
         
-        .hide-scroll::-webkit-scrollbar { display: none; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: var(--alpine-blue); border-radius: 10px; }
 
         @media print {
             body * { visibility: hidden; }
-            #agreement-print-zone, #agreement-print-zone * { visibility: visible; }
-            #agreement-print-zone { position: absolute; left: 0; top: 0; width: 100%; }
+            #agreement-view, #agreement-view * { visibility: visible; }
+            #agreement-view { position: absolute; left: 0; top: 0; width: 100%; }
         }
     </style>
 </head>
-<body x-data="alpineApp()" x-init="initData()">
+<body x-data="alpineStore()" x-init="initData()">
 
     <nav class="fixed top-0 w-full z-50 glass-nav py-4 px-6 md:px-12 flex justify-between items-center">
         <div>
             <h1 class="text-sm md:text-lg font-bold tracking-widest">ALPINE IPHONE</h1>
-            <p class="text-[8px] text-blue-500 tracking-[0.4em] font-bold uppercase">Worldwide Edition</p>
+            <p class="text-[8px] text-blue-500 tracking-[0.4em] font-bold">WORLDWIDE</p>
         </div>
-        <div class="flex gap-4">
-            <button @click="showCart = true" class="relative bg-white/5 p-2 rounded-full px-5 border border-white/10 flex items-center gap-2">
-                <i class="fa fa-bag-shopping"></i>
-                <span class="text-xs font-bold" x-text="cart.length > 0 ? cart.length + ' Items' : 'Bag'"></span>
-            </button>
-        </div>
+        <button @click="showCart = true" class="bg-white/5 p-2 rounded-full px-5 border border-white/10 flex items-center gap-2">
+            <i class="fa fa-bag-shopping"></i>
+            <span class="text-xs font-bold" x-text="cart.length > 0 ? cart.length : 'Bag'"></span>
+        </button>
     </nav>
 
     <div class="h-screen flex items-center justify-center text-center px-4">
         <div>
-            <h2 class="brand-font font-bold mb-4 italic text-4xl md:text-6xl lg:text-8xl">PREMIUM STOCK</h2>
-            <p class="text-blue-500 tracking-[0.5em] text-[10px] uppercase mb-10">Direct Global Logistics Hub</p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <button @click="document.getElementById('full-price-list').scrollIntoView({behavior:'smooth'})" class="border border-white/20 px-8 py-3 rounded-full text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Full Price List</button>
-                <button @click="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})" class="bg-blue-600 px-8 py-3 rounded-full text-[10px] font-bold uppercase transition">Browse Catalog</button>
+            <h2 class="brand-font font-bold mb-4 italic text-4xl md:text-7xl">GLOBAL STOCK</h2>
+            <div class="flex flex-wrap justify-center gap-4 mt-10">
+                <button @click="document.getElementById('full-price-list').scrollIntoView()" class="border border-white/20 px-6 py-3 rounded-full text-[10px] font-bold uppercase">Price List</button>
+                <button @click="document.getElementById('catalog').scrollIntoView()" class="bg-blue-600 px-6 py-3 rounded-full text-[10px] font-bold uppercase">Catalog</button>
             </div>
         </div>
     </div>
 
     <section id="full-price-list" class="py-20 bg-[#050505] border-t border-white/5">
         <div class="container mx-auto px-6">
-            <div class="mb-12">
-                <h3 class="brand-font text-3xl mb-2 italic text-blue-500">Global Price Index</h3>
-                <p class="text-gray-500 tracking-widest uppercase text-[10px]">Verified Stock • Updated April 2026</p>
-            </div>
-            
-            <div class="bg-[#0d0d0d] rounded-3xl overflow-hidden border border-white/5 shadow-2xl overflow-x-auto">
+            <h3 class="brand-font text-2xl mb-8 italic text-blue-500">Official Price Index</h3>
+            <div class="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-white/5 price-table-container">
                 <table class="price-table">
                     <thead>
                         <tr>
                             <th>Model</th>
                             <th>Storage</th>
-                            <th>Alpine Price</th>
+                            <th>Price</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -92,9 +108,7 @@
                                 <td class="font-bold italic text-white" x-text="p.name"></td>
                                 <td class="text-gray-500" x-text="p.size"></td>
                                 <td class="text-blue-400 font-bold" x-text="'R' + p.price.toLocaleString()"></td>
-                                <td>
-                                    <button @click="openProduct(p)" class="text-[9px] font-black bg-white/5 border border-white/10 px-4 py-1.5 rounded-full hover:bg-blue-600 transition">Order</button>
-                                </td>
+                                <td><button @click="openProduct(p)" class="text-[9px] font-black bg-blue-600 px-3 py-1 rounded-full uppercase">Order</button></td>
                             </tr>
                         </template>
                     </tbody>
@@ -105,22 +119,18 @@
 
     <section id="catalog" class="py-20 bg-black">
         <div class="container mx-auto px-6">
-            <div class="flex justify-between items-end mb-10">
-                <h3 class="brand-font text-2xl italic">Visual Catalog</h3>
-                <input type="text" x-model="search" placeholder="Search models..." class="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs focus:outline-none focus:border-blue-500 w-48 md:w-64">
+            <div class="flex flex-col md:flex-row justify-between mb-10 gap-4">
+                <h3 class="brand-font text-2xl italic">Inventory</h3>
+                <input type="text" x-model="search" placeholder="Search (e.g. 13 Pro)..." class="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs focus:border-blue-500 outline-none">
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <template x-for="p in filteredProducts" :key="p.id">
                     <div class="apple-card p-6 rounded-2xl flex flex-col cursor-pointer" @click="openProduct(p)">
-                        <div class="flex justify-between items-start mb-4">
-                            <h4 class="font-bold text-lg italic leading-tight" x-text="p.name"></h4>
-                            <span class="text-[9px] text-blue-500 font-bold">CERTIFIED</span>
-                        </div>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-6 italic" x-text="p.size"></p>
+                        <h4 class="font-bold text-lg italic mb-1" x-text="p.name"></h4>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-6" x-text="p.size"></p>
                         <div class="mt-auto pt-4 border-t border-white/5 flex justify-between items-center">
                             <span class="text-white font-bold" x-text="'R' + p.price.toLocaleString()"></span>
-                            <i class="fa fa-arrow-right text-xs text-blue-500"></i>
+                            <span class="text-[9px] uppercase font-black text-blue-500">Secure</span>
                         </div>
                     </div>
                 </template>
@@ -129,113 +139,78 @@
     </section>
 
     <div x-show="selectedProduct" x-cloak class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 overflow-y-auto">
-        <div class="w-full max-w-xl bg-[#0d0d0d] rounded-3xl p-8 border border-white/10 my-10 relative">
-            <button @click="selectedProduct = null" class="absolute top-6 right-6 text-3xl font-light">&times;</button>
+        <div class="w-full max-w-xl bg-[#0d0d0d] rounded-3xl p-8 border border-white/10 relative">
+            <button @click="selectedProduct = null" class="absolute top-6 right-6 text-2xl">&times;</button>
             <h2 class="text-3xl font-black italic mb-2" x-text="selectedProduct?.name"></h2>
-            <p class="text-blue-500 text-xs font-bold mb-8 uppercase tracking-widest">Alpine Sales Agreement Required</p>
-            
+            <p class="text-blue-500 text-xs font-bold mb-8 uppercase tracking-widest italic">Agreement Details Required</p>
             <div class="grid grid-cols-1 gap-2 mb-8">
                 <input type="text" x-model="buyer.name" placeholder="Full Legal Name" class="form-input">
                 <input type="text" x-model="buyer.id" placeholder="ID Number / Passport" class="form-input">
                 <input type="text" x-model="buyer.address" placeholder="Delivery Address" class="form-input">
                 <select x-model="buyer.payment" class="form-input">
-                    <option value="">Select Payment Method</option>
-                    <option value="EFT">EFT / Bank Transfer</option>
-                    <option value="PayFast">PayFast (Secure Card)</option>
-                    <option value="Cash">Cash on Collection</option>
+                    <option value="">Payment Method</option>
+                    <option value="EFT">EFT / Transfer</option>
+                    <option value="PayFast">PayFast (Card)</option>
+                    <option value="Cash">Cash on Delivery</option>
                 </select>
             </div>
-
-            <button @click="addToBag(selectedProduct)" class="w-full bg-blue-600 py-4 rounded-xl font-bold uppercase tracking-widest transition hover:bg-blue-500">
-                Confirm Details & Add to Bag
-            </button>
+            <button @click="addToBag(selectedProduct)" class="w-full bg-blue-600 py-4 rounded-xl font-bold uppercase tracking-widest">Confirm & Add</button>
         </div>
     </div>
 
     <div x-show="showCart" x-cloak class="fixed inset-0 z-[110] bg-black p-6 flex flex-col overflow-y-auto">
-        <div class="flex justify-between items-center mb-10 px-4">
-            <h2 class="brand-font text-3xl italic">Agreement & Bag</h2>
-            <button @click="showCart = false" class="text-5xl font-light hover:text-blue-500">&times;</button>
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="brand-font text-2xl italic">Final Bag</h2>
+            <button @click="showCart = false" class="text-4xl">&times;</button>
         </div>
 
-        <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 pb-20">
-            <div class="agreement-paper shadow-2xl" id="agreement-print-zone">
-                <h3 class="text-center font-bold text-lg mb-8 underline">SALES & PURCHASE AGREEMENT</h3>
-                <div class="space-y-2 mb-8 text-[12px]">
-                    <p><strong>DATE:</strong> April 10, 2026</p>
-                    <p><strong>SELLER:</strong> Alpine iPhone Worldwide</p>
-                    <p><strong>BUYER:</strong> <span x-text="buyer.name || '____________________'"></span></p>
-                    <p><strong>ID/PASS:</strong> <span x-text="buyer.id || '____________________'"></span></p>
-                    <p><strong>ADDRESS:</strong> <span x-text="buyer.address || '____________________'"></span></p>
-                </div>
+        <div class="container mx-auto max-w-2xl">
+            <div class="agreement-paper mb-10" id="agreement-view">
+                <h3 class="text-center font-bold text-lg mb-6 underline">SALES AGREEMENT</h3>
+                <p><strong>SELLER:</strong> Alpine iPhone Worldwide</p>
+                <p><strong>BUYER:</strong> <span x-text="buyer.name || '__________'"></span></p>
+                <p><strong>ID/PASS:</strong> <span x-text="buyer.id || '__________'"></span></p>
                 <hr class="my-6 border-black">
-                <p class="font-bold mb-4 text-xs">PURCHASED INVENTORY:</p>
-                <div class="space-y-2 mb-8 text-[12px]">
-                    <template x-for="(item, index) in cart" :key="index">
-                        <div class="flex justify-between border-b border-gray-100 pb-1">
-                            <span x-text="item.name + ' (' + item.size + ')'"></span>
-                            <span x-text="'R' + item.price.toLocaleString()"></span>
-                        </div>
-                    </template>
-                </div>
-                <div class="flex justify-between font-black text-xl mb-10 pt-4 border-t-2 border-black">
+                <template x-for="item in cart">
+                    <p>• <span x-text="item.name"></span> (<span x-text="item.size"></span>) - R<span x-text="item.price"></span></p>
+                </template>
+                <div class="flex justify-between font-black text-xl mt-6 pt-4 border-t-2 border-black">
                     <span>TOTAL:</span>
                     <span x-text="'R' + cartTotal().toLocaleString()"></span>
                 </div>
-                <p class="text-[9px] leading-tight italic">Buyer accepts the device as Certified Pre-Owned. Alpine Worldwide manages all logistics and verified deliveries.</p>
-                <div class="mt-16 flex justify-between">
-                    <div class="border-t border-black pt-1 w-32 text-[8px] font-bold text-center">AUTHORIZED SELLER</div>
-                    <div class="border-t border-black pt-1 w-32 text-[8px] font-bold text-center">BUYER SIGNATURE</div>
-                </div>
             </div>
 
-            <div class="space-y-6">
-                <div class="bg-white/5 p-8 rounded-[40px] border border-white/10 text-center">
-                    <h4 class="text-xl font-bold mb-4 italic">Confirm Order</h4>
-                    <p class="text-xs text-gray-500 mb-10">Send your formal agreement to an Alpine agent below.</p>
-                    
-                    <button @click="checkoutWhatsApp(1)" class="w-full bg-[#25D366] text-black py-5 rounded-2xl font-black uppercase text-xs tracking-widest mb-4 transition hover:scale-[1.02]">
-                        <i class="fab fa-whatsapp mr-2 text-lg"></i> Checkout (Line 1: 078)
-                    </button>
-                    <button @click="checkoutWhatsApp(2)" class="w-full bg-[#25D366] text-black py-5 rounded-2xl font-black uppercase text-xs tracking-widest mb-4 transition hover:scale-[1.02]">
-                        <i class="fab fa-whatsapp mr-2 text-lg"></i> Checkout (Line 2: 063)
-                    </button>
-                    <button onclick="window.print()" class="w-full bg-white text-black py-5 rounded-2xl font-black uppercase text-xs tracking-widest mb-10">
-                        <i class="fa fa-print mr-2 text-lg"></i> Print Agreement
-                    </button>
-                    
-                    <div class="text-[10px] text-gray-600 uppercase tracking-widest italic">Secure Alpine Logistics Verified</div>
-                </div>
+            <div class="grid grid-cols-1 gap-4">
+                <button @click="checkoutWhatsApp(1)" class="w-full bg-[#25D366] text-black py-4 rounded-xl font-bold uppercase text-xs">Checkout (Line 1)</button>
+                <button @click="checkoutWhatsApp(2)" class="w-full bg-[#25D366] text-black py-4 rounded-xl font-bold uppercase text-xs">Checkout (Line 2)</button>
+                <button onclick="window.print()" class="w-full bg-white text-black py-4 rounded-xl font-bold uppercase text-xs">Print Agreement</button>
             </div>
         </div>
     </div>
 
-    <footer class="py-24 bg-[#080808] border-t border-white/5">
-        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16 text-xs text-gray-500 uppercase tracking-widest">
+    <footer class="py-20 bg-[#080808] border-t border-white/5 text-[10px] text-gray-500 uppercase tracking-widest px-6">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
             <div>
-                <h4 class="text-blue-500 mb-6 font-bold">Electronic Mail</h4>
-                <p class="mb-2">d14o10c04@gmail.com</p>
+                <p class="text-blue-500 mb-4">Emails</p>
+                <p>d14o10c04@gmail.com</p>
                 <p>mnikathisanelisiwe@gmail.com</p>
             </div>
             <div>
-                <h4 class="text-blue-500 mb-6 font-bold">Business Hubs</h4>
-                <p class="mb-2">Pretoria, South Africa</p>
-                <p>Newcastle, KZN</p>
+                <p class="text-blue-500 mb-4">Lines</p>
+                <p>078 417 4780 | 063 969 9432</p>
             </div>
             <div>
-                <h4 class="text-blue-500 mb-6 font-bold">Alpine Worldwide</h4>
-                <p>© 2026 Secured Global Trading. <br>All Rights Reserved.</p>
+                <p class="text-blue-500 mb-4">Logistics</p>
+                <p>Pretoria | Newcastle, KZN</p>
+                <p class="mt-4">© 2026 Alpine Worldwide</p>
             </div>
         </div>
     </footer>
 
     <script>
-        function alpineApp() {
+        function alpineStore() {
             return {
-                search: '',
-                showCart: false,
-                selectedProduct: null,
-                cart: [],
+                search: '', showCart: false, selectedProduct: null, cart: [],
                 buyer: { name: '', id: '', address: '', payment: '' },
                 products: [
                     { id: 1, name: "iPhone X", size: "64GB", price: 4199 },
@@ -284,28 +259,26 @@
                 ],
                 initData() {
                     gsap.registerPlugin(ScrollTrigger);
-                    gsap.to(".apple-card", { opacity: 1, y: 0, stagger: 0.05, scrollTrigger: { trigger: "#catalogGrid", start: "top 90%" } });
+                    // Standard mobile visibility fix applied above
                 },
                 get filteredProducts() {
                     return this.products.filter(p => p.name.toLowerCase().includes(this.search.toLowerCase()));
                 },
                 openProduct(p) { this.selectedProduct = p; },
                 addToBag(p) { 
-                    if(!this.buyer.name || !this.buyer.id) return alert("Please complete Agreement details (Name/ID) to proceed.");
-                    this.cart.push(JSON.parse(JSON.stringify(p))); 
-                    this.selectedProduct = null; 
-                    this.showCart = true; 
+                    if(!this.buyer.name) return alert("Agreement info is mandatory.");
+                    this.cart.push(p); this.selectedProduct = null; this.showCart = true; 
                 },
-                cartTotal() { return this.cart.reduce((sum, i) => sum + i.price, 0); },
+                cartTotal() { return this.cart.reduce((s, i) => s + i.price, 0); },
                 checkoutWhatsApp(line) {
                     const phone = line === 1 ? "27784174780" : "27639699432";
-                    let msg = `*ALPINE IPHONE WORLDWIDE - SALES AGREEMENT*%0A%0A`;
-                    msg += `*BUYER:* ${this.buyer.name}%0A*ID:* ${this.buyer.id}%0A*ADDRESS:* ${this.buyer.address}%0A%0A`;
-                    msg += `*ORDER DETAILS*%0A`;
+                    let msg = `*ALPINE WORLDWIDE - AGREEMENT*%0A%0ABUYER: ${this.buyer.name}%0A`;
                     this.cart.forEach(i => msg += `• ${i.name} (${i.size}) - R${i.price}%0A`);
-                    msg += `%0A*TOTAL AMOUNT:* R${this.cartTotal()}%0A*PAYMENT:* ${this.buyer.payment}`;
+                    msg += `%0ATOTAL: R${this.cartTotal()}`;
                     window.open(`https://wa.me/${phone}?text=${msg}`);
                 }
             }
         }
-    <
+    </script>
+</body>
+</html>
