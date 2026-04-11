@@ -3,87 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPINE IPHONE WORLDWIDE | Advanced Global Hub</title>
+    <title>ALPINE IPHONE WORLDWIDE | Professional Sales & Logistics</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
         :root { --alpine-blue: #3b82f6; --alpine-black: #050505; --whatsapp-green: #25D366; }
         [x-cloak] { display: none !important; }
-        
-        body { background-color: var(--alpine-black); color: white; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        body { background-color: var(--alpine-black); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
         h1, h2, h3, .brand-font { font-family: 'Syncopate', sans-serif; text-transform: uppercase; }
         
-        /* Mobile Visibility Fix - Hard Override */
-        .product-card, .price-row { opacity: 1 !important; transform: none !important; display: flex !important; }
-
+        /* Layout */
         .glass-nav { background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .apple-card { background: #0d0d0d; border: 1px solid #1a1a1a; transition: 0.3s ease; opacity: 1 !important; }
+        .apple-card:hover { border-color: var(--alpine-blue); transform: translateY(-5px); }
         
-        /* Advanced Table */
+        /* Table Styling */
         .price-table-wrapper { overflow-x: auto; border-radius: 20px; border: 1px solid #1a1a1a; background: #0d0d0d; }
-        .price-table { width: 100%; min-width: 600px; text-align: left; }
-        .price-table th { padding: 20px; color: var(--alpine-blue); font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #222; }
-        .price-table td { padding: 15px 20px; border-bottom: 1px solid #111; font-size: 0.85rem; }
+        .price-table { width: 100%; min-width: 600px; text-align: left; border-collapse: collapse; }
+        .price-table th { padding: 15px 20px; color: var(--alpine-blue); font-size: 0.65rem; border-bottom: 1px solid #222; }
+        .price-table td { padding: 12px 20px; border-bottom: 1px solid #111; font-size: 0.85rem; }
 
-        /* Agreement Aesthetic */
-        .agreement-doc { background: #fff; color: #000; padding: 50px; font-family: 'Courier New', monospace; box-shadow: 0 30px 60px rgba(0,0,0,0.5); border-radius: 4px; }
+        /* Forms & Agreement */
+        .form-input { width: 100%; padding: 12px; background: #141414; border: 1px solid #222; border-radius: 10px; color: white; margin-bottom: 10px; font-size: 0.9rem; }
+        .form-input:focus { outline: none; border-color: var(--alpine-blue); }
+        .agreement-paper { background: #fff; color: #000; padding: 40px; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.4; border-radius: 4px; }
+
+        .color-circle { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: 0.2s; }
+        .color-circle.active { border-color: var(--alpine-blue); transform: scale(1.2); }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--alpine-blue); border-radius: 10px; }
         
-        .btn-green { background: var(--whatsapp-green); color: black; font-weight: 900; transition: 0.3s; }
-        .btn-green:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
-
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: var(--alpine-blue); }
+        @media print {
+            body * { visibility: hidden; }
+            #agreement-print, #agreement-print * { visibility: visible; }
+            #agreement-print { position: absolute; left: 0; top: 0; width: 100%; }
+        }
     </style>
 </head>
-<body x-data="alpineCore()" x-init="init()">
+<body x-data="alpineApp()" x-init="initData()">
 
-    <nav class="fixed top-0 w-full z-[100] glass-nav py-5 px-6 md:px-12 flex justify-between items-center">
+    <nav class="fixed top-0 w-full z-50 glass-nav py-4 px-6 md:px-12 flex justify-between items-center">
         <div>
             <h1 class="text-sm md:text-lg font-bold tracking-widest">ALPINE IPHONE</h1>
-            <p class="text-[8px] text-blue-500 tracking-[0.5em] font-black uppercase">Worldwide Edition</p>
+            <p class="text-[8px] text-blue-500 tracking-[0.4em] font-bold uppercase">Worldwide Logistics</p>
         </div>
-        <button @click="showCart = true" class="relative bg-white text-black px-6 py-2 rounded-full font-black text-[10px] tracking-widest flex items-center gap-3 transition hover:bg-blue-500 hover:text-white">
-            BAG <span x-text="cartCount()" class="bg-black text-white px-2 py-0.5 rounded-full"></span>
+        <button @click="showCart = true" class="bg-white text-black px-6 py-2 rounded-full font-black text-[10px] flex items-center gap-3">
+            BAG <span x-text="cart.length" class="bg-blue-600 text-white px-2 py-0.5 rounded-full"></span>
         </button>
     </nav>
 
-    <div class="h-[70vh] flex flex-col items-center justify-center text-center px-6 pt-20">
-        <h2 class="brand-font text-4xl md:text-7xl italic font-black mb-4 tracking-tighter">Certified<br>Logistics</h2>
-        <p class="text-gray-500 text-[10px] tracking-[0.6em] uppercase mb-10 italic">Secure Global iPhone Trading</p>
+    <div class="h-screen flex flex-col items-center justify-center text-center px-6">
+        <h2 class="brand-font text-5xl md:text-8xl italic font-black mb-4 tracking-tighter">BRAND NEW<br>STOCK</h2>
+        <p class="text-blue-500 text-[10px] tracking-[0.6em] uppercase mb-10 italic">Factory Sealed & Pre-Owned Certified</p>
         <div class="flex gap-4">
-            <button @click="document.getElementById('inventory-list').scrollIntoView()" class="bg-blue-600 px-8 py-4 rounded-full text-[10px] font-black uppercase tracking-widest transition">Full Price List</button>
+            <button @click="document.getElementById('price-index').scrollIntoView()" class="bg-blue-600 px-8 py-4 rounded-full text-[10px] font-black uppercase tracking-widest transition">Full Price List</button>
+            <button @click="document.getElementById('catalog').scrollIntoView()" class="border border-white/20 px-8 py-4 rounded-full text-[10px] font-black uppercase tracking-widest transition">Browse Stock</button>
         </div>
     </div>
 
-    <section id="inventory-list" class="py-20 px-6">
+    <section id="price-index" class="py-20 px-6 bg-[#050505] border-t border-white/5">
         <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-end mb-10">
-                <h3 class="brand-font text-2xl italic border-l-4 border-blue-600 pl-4">Price Index</h3>
-                <input type="text" x-model="search" placeholder="Filter models..." class="bg-[#111] border border-white/10 rounded-xl px-4 py-2 text-xs focus:outline-none focus:border-blue-500 w-48">
-            </div>
-            
+            <h3 class="brand-font text-3xl mb-10 italic text-blue-500">Global Price Index</h3>
             <div class="price-table-wrapper">
                 <table class="price-table">
                     <thead>
                         <tr>
-                            <th>Device Model</th>
-                            <th>Capacity</th>
-                            <th>Global Price</th>
-                            <th>Selection</th>
+                            <th>Model</th>
+                            <th>Storage</th>
+                            <th>Current Price</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <template x-for="p in filteredProducts" :key="p.id">
-                            <tr class="price-row">
-                                <td class="font-bold italic" x-text="p.name"></td>
+                        <template x-for="p in products" :key="p.id">
+                            <tr>
+                                <td class="font-bold italic text-white" x-text="p.name"></td>
                                 <td class="text-gray-500" x-text="p.size"></td>
                                 <td class="text-blue-400 font-black" x-text="'R' + p.price.toLocaleString()"></td>
-                                <td>
-                                    <button @click="openDetails(p)" class="text-[9px] font-black bg-white/5 border border-white/10 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition uppercase">Details</button>
-                                </td>
+                                <td><button @click="openProduct(p)" class="text-[9px] font-black bg-white/5 border border-white/10 px-4 py-2 rounded-lg hover:bg-blue-600 transition uppercase">Order</button></td>
                             </tr>
                         </template>
                     </tbody>
@@ -92,157 +96,177 @@
         </div>
     </section>
 
-    <div x-show="selectedProduct" x-cloak class="fixed inset-0 z-[150] bg-black/95 flex items-center justify-center p-4">
-        <div class="w-full max-w-lg bg-[#0d0d0d] rounded-[40px] p-10 border border-white/10 relative shadow-2xl">
-            <button @click="selectedProduct = null" class="absolute top-8 right-8 text-3xl font-light">&times;</button>
-            <h2 class="text-4xl font-black italic mb-2" x-text="selectedProduct?.name"></h2>
-            <p class="text-blue-500 text-[10px] font-bold tracking-[0.3em] uppercase mb-10 italic" x-text="selectedProduct?.size + ' International Edition'"></p>
-            
-            <label class="text-[10px] text-gray-500 uppercase tracking-widest block mb-2">Buyer Name (For Agreement)</label>
-            <input type="text" x-model="buyer.name" placeholder="Enter Full Name" class="form-input mb-4">
-            
-            <label class="text-[10px] text-gray-500 uppercase tracking-widest block mb-2">Delivery City</label>
-            <input type="text" x-model="buyer.address" placeholder="e.g. Pretoria / Newcastle" class="form-input mb-10">
+    <section id="catalog" class="py-20 px-6 bg-black">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-end mb-12">
+                <h3 class="brand-font text-3xl italic">Interactive Stock</h3>
+                <input type="text" x-model="search" placeholder="Search..." class="bg-[#111] border border-white/10 rounded-full px-5 py-2 text-xs focus:border-blue-500 outline-none w-48">
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <template x-for="p in filteredProducts" :key="p.id">
+                    <div class="apple-card p-8 rounded-[40px] flex flex-col cursor-pointer" @click="openProduct(p)">
+                        <div class="flex justify-between items-start mb-6">
+                            <h4 class="font-bold text-xl italic leading-tight" x-text="p.name"></h4>
+                            <span class="text-[9px] text-blue-500 font-bold border border-blue-500 px-2 py-0.5 rounded">NEW</span>
+                        </div>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-10 italic" x-text="p.size"></p>
+                        <div class="mt-auto flex justify-between items-center pt-6 border-t border-white/5">
+                            <span class="text-2xl font-light text-blue-500" x-text="'R' + p.price.toLocaleString()"></span>
+                            <button class="bg-white text-black text-[9px] font-black px-4 py-2 rounded-full uppercase">Select</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
 
-            <button @click="addToCart(selectedProduct)" class="w-full bg-blue-600 py-5 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-blue-500 transition active:scale-95">
-                Add to Bag
+    <div x-show="selectedProduct" x-cloak class="fixed inset-0 z-[150] bg-black/95 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-xl bg-[#0d0d0d] rounded-[40px] p-8 md:p-12 border border-white/10 my-10 relative">
+            <button @click="selectedProduct = null" class="absolute top-8 right-8 text-3xl font-light">&times;</button>
+            <h2 class="text-4xl font-black italic tracking-tighter mb-2" x-text="selectedProduct?.name"></h2>
+            <p class="text-blue-500 text-xs font-bold mb-10 uppercase tracking-widest italic" x-text="selectedProduct?.size + ' Factory Edition'"></p>
+            
+            <label class="text-[10px] text-gray-500 uppercase tracking-widest block mb-4">Choose Color</label>
+            <div class="flex gap-4 mb-10">
+                <template x-for="c in ['Black', 'White', 'Red', 'Grey', 'Blue']">
+                    <div class="flex flex-col items-center gap-2">
+                        <div @click="buyer.color = c" :class="buyer.color === c ? 'active' : ''" :style="'background-color: ' + c.toLowerCase()" class="color-circle"></div>
+                        <span class="text-[8px] uppercase tracking-tighter" x-text="c"></span>
+                    </div>
+                </template>
+            </div>
+
+            <div class="space-y-3 mb-10">
+                <input type="text" x-model="buyer.name" placeholder="Full Name" class="form-input">
+                <input type="text" x-model="buyer.number" placeholder="WhatsApp Number" class="form-input">
+                <input type="text" x-model="buyer.address" placeholder="Delivery Location" class="form-input">
+                <select x-model="buyer.payment" class="form-input">
+                    <option value="">Payment Method</option>
+                    <option value="EFT">EFT Transfer</option>
+                    <option value="PayFast">PayFast (Card)</option>
+                    <option value="Cash">Cash on Delivery</option>
+                </select>
+            </div>
+
+            <button @click="addToCart(selectedProduct)" class="w-full bg-blue-600 py-5 rounded-2xl font-black uppercase text-xs tracking-widest">
+                Confirm Details & Add
             </button>
         </div>
     </div>
 
-    <div x-show="showCart" x-cloak class="fixed inset-0 z-[200] bg-black p-6 md:p-12 flex flex-col overflow-y-auto">
-        <div class="flex justify-between items-center mb-16">
-            <h2 class="brand-font text-3xl italic">Secure Bag</h2>
+    <div x-show="showCart" x-cloak class="fixed inset-0 z-[200] bg-black p-6 flex flex-col overflow-y-auto">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="brand-font text-3xl italic">Order Summary</h2>
             <button @click="showCart = false" class="text-6xl font-light">&times;</button>
         </div>
 
-        <div class="max-w-5xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 pb-20">
-            <div class="agreement-doc">
-                <h3 class="text-center font-bold text-lg mb-10 underline tracking-tighter">SALES & PURCHASE AGREEMENT</h3>
-                <div class="space-y-3 text-[11px] mb-10">
+        <div class="container mx-auto max-w-2xl pb-20">
+            <div class="agreement-paper mb-10 shadow-2xl" id="agreement-print">
+                <h3 class="text-center font-bold text-lg mb-8 underline italic">ALPINE WORLDWIDE SALES AGREEMENT</h3>
+                <div class="space-y-2 text-[11px] mb-8">
                     <p><strong>SELLER:</strong> Alpine iPhone Worldwide</p>
-                    <p><strong>BUYER:</strong> <span x-text="buyer.name || '________________'"></span></p>
-                    <p><strong>DELIVERY:</strong> <span x-text="buyer.address || '________________'"></span></p>
-                    <p><strong>DATE:</strong> April 11, 2026</p>
+                    <p><strong>BUYER:</strong> <span x-text="buyer.name || '____________________'"></span></p>
+                    <p><strong>CONTACT:</strong> <span x-text="buyer.number || '____________________'"></span></p>
+                    <p><strong>ADDRESS:</strong> <span x-text="buyer.address || '____________________'"></span></p>
                 </div>
-                <div class="border-t border-b border-black py-6 mb-10">
-                    <p class="font-bold mb-4 uppercase text-[10px]">Product Description:</p>
-                    <template x-for="item in cart" :key="item.cartId">
-                        <div class="flex justify-between mb-2">
-                            <span x-text="item.name + ' (' + item.size + ')'"></span>
-                            <span x-text="'R' + item.price.toLocaleString()"></span>
-                        </div>
-                    </template>
-                </div>
-                <div class="flex justify-between font-black text-xl mb-12">
+                <hr class="my-6 border-black">
+                <template x-for="item in cart">
+                    <div class="flex justify-between mb-2">
+                        <span x-text="item.name + ' (' + item.size + ') - ' + item.color"></span>
+                        <span x-text="'R' + item.price.toLocaleString()"></span>
+                    </div>
+                </template>
+                <div class="flex justify-between font-black text-xl mt-6 pt-4 border-t-2 border-black">
                     <span>TOTAL:</span>
                     <span x-text="'R' + total().toLocaleString()"></span>
                 </div>
-                <div class="mt-20 border-t border-black pt-2 w-48 text-[9px] font-bold uppercase italic">Digitally Signed by Buyer</div>
+                <p class="mt-4 italic text-xs">Payment Method: <span x-text="buyer.payment"></span></p>
+                <div class="mt-16 border-t border-black pt-2 w-48 text-center text-[9px] font-bold">Authorized Buyer Signature</div>
             </div>
 
-            <div class="flex flex-col justify-center">
-                <div class="bg-white/5 p-10 rounded-[40px] border border-white/5">
-                    <h4 class="font-bold text-xl mb-2">Finalize Order</h4>
-                    <p class="text-gray-500 text-xs mb-10 italic">Please select your preferred communication line to finalize payment and logistics.</p>
-                    
-                    <button @click="sendWhatsApp(1)" class="w-full btn-green py-5 rounded-2xl mb-4 uppercase text-xs tracking-widest">
-                        <i class="fab fa-whatsapp mr-2 text-lg"></i> Checkout Line 1 (078)
-                    </button>
-                    <button @click="sendWhatsApp(2)" class="w-full btn-green py-5 rounded-2xl mb-10 uppercase text-xs tracking-widest">
-                        <i class="fab fa-whatsapp mr-2 text-lg"></i> Checkout Line 2 (063)
-                    </button>
-                    
-                    <button onclick="window.print()" class="w-full bg-white/10 text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest">
-                        <i class="fa fa-print mr-2"></i> Print Agreement
-                    </button>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button @click="checkout(1)" class="bg-[#25D366] text-black py-5 rounded-2xl font-black uppercase text-xs tracking-widest">WhatsApp Line 1</button>
+                <button @click="checkout(2)" class="bg-[#25D366] text-black py-5 rounded-2xl font-black uppercase text-xs tracking-widest">WhatsApp Line 2</button>
+                <button onclick="window.print()" class="md:col-span-2 bg-white text-black py-4 rounded-xl font-black uppercase text-[10px] tracking-widest">Print Agreement</button>
             </div>
         </div>
     </div>
 
-    <footer class="py-20 bg-[#080808] border-t border-white/5 text-[10px] text-gray-600 tracking-[0.4em] uppercase text-center px-6">
-        <div class="mb-8 flex flex-col gap-2">
-            <p>d14o10c04@gmail.com | mnikathisanelisiwe@gmail.com</p>
-            <p>078 417 4780 | 063 969 9432</p>
-        </div>
-        <p>© 2026 Alpine iPhone Worldwide. Logistics Hub: Pretoria & Newcastle.</p>
+    <footer class="py-20 bg-[#080808] border-t border-white/5 text-[10px] text-gray-600 tracking-[0.4em] uppercase text-center">
+        <p class="mb-4 text-blue-500">d14o10c04@gmail.com | 078 417 4780 | 063 969 9432</p>
+        <p>© 2026 Alpine iPhone Worldwide. Pretoria & Newcastle Logistics.</p>
     </footer>
 
     <script>
-        function alpineCore() {
+        function alpineApp() {
             return {
-                search: '',
-                showCart: false,
-                selectedProduct: null,
-                cart: [],
-                buyer: { name: '', address: '' },
+                search: '', showCart: false, selectedProduct: null, cart: [],
+                buyer: { name: '', number: '', address: '', payment: '', color: 'Black' },
                 products: [
                     { id: 1, name: "iPhone X", size: "64GB", price: 4199 },
                     { id: 2, name: "iPhone X", size: "256GB", price: 4650 },
-                    { id: 3, name: "iPhone XR", size: "64GB", price: 4400 },
-                    { id: 4, name: "iPhone XR", size: "128GB", price: 5000 },
+                    { id: 3, name: "iPhone XR", size: "64GB", price: 5100 },
+                    { id: 4, name: "iPhone XR", size: "128GB", price: 5300 },
                     { id: 5, name: "iPhone XS", size: "64GB", price: 4800 },
                     { id: 6, name: "iPhone XS", size: "256GB", price: 5100 },
                     { id: 7, name: "iPhone XS Max", size: "64GB", price: 5700 },
                     { id: 8, name: "iPhone XS Max", size: "256GB", price: 6200 },
-                    { id: 9, name: "iPhone 11", size: "64GB", price: 5400 },
-                    { id: 10, name: "iPhone 11", size: "128GB", price: 5900 },
-                    { id: 11, name: "iPhone 11 Pro", size: "64GB", price: 6500 },
-                    { id: 12, name: "iPhone 11 Pro", size: "256GB", price: 6900 },
-                    { id: 13, name: "iPhone 11 Pro Max", size: "64GB", price: 7400 },
-                    { id: 14, name: "iPhone 11 Pro Max", size: "256GB", price: 7700 },
-                    { id: 15, name: "iPhone 12", size: "64GB", price: 6200 },
-                    { id: 16, name: "iPhone 12", size: "128GB", price: 6700 },
-                    { id: 17, name: "iPhone 12 Mini", size: "128GB", price: 5700 },
-                    { id: 18, name: "iPhone 12 Pro", size: "128GB", price: 8300 },
-                    { id: 19, name: "iPhone 12 Pro", size: "256GB", price: 8600 },
-                    { id: 20, name: "iPhone 12 Pro Max", size: "128GB", price: 10700 },
-                    { id: 21, name: "iPhone 12 Pro Max", size: "256GB", price: 11200 },
-                    { id: 22, name: "iPhone 13", size: "128GB", price: 8100 },
-                    { id: 23, name: "iPhone 13", size: "256GB", price: 8450 },
-                    { id: 24, name: "iPhone 13 Mini", size: "128GB", price: 7550 },
-                    { id: 25, name: "iPhone 13 Pro", size: "128GB", price: 10400 },
-                    { id: 26, name: "iPhone 13 Pro", size: "256GB", price: 10700 },
-                    { id: 27, name: "iPhone 13 Pro Max", size: "128GB", price: 12200 },
-                    { id: 28, name: "iPhone 13 Pro Max", size: "256GB", price: 12700 },
-                    { id: 29, name: "iPhone 14", size: "128GB", price: 9200 },
-                    { id: 30, name: "iPhone 14", size: "256GB", price: 10000 },
-                    { id: 31, name: "iPhone 14 Plus", size: "128GB", price: 10000 },
-                    { id: 32, name: "iPhone 14 Plus", size: "256GB", price: 12700 },
-                    { id: 33, name: "iPhone 14 Pro", size: "128GB", price: 12700 },
-                    { id: 34, name: "iPhone 14 Pro", size: "256GB", price: 13200 },
-                    { id: 35, name: "iPhone 14 Pro Max", size: "128GB", price: 15700 },
-                    { id: 36, name: "iPhone 14 Pro Max", size: "256GB", price: 16200 },
-                    { id: 37, name: "iPhone 15", size: "128GB", price: 12700 },
-                    { id: 38, name: "iPhone 15", size: "256GB", price: 13400 },
-                    { id: 39, name: "iPhone 15 Plus", size: "128GB", price: 13700 },
-                    { id: 40, name: "iPhone 15 Plus", size: "256GB", price: 14700 },
-                    { id: 41, name: "iPhone 15 Pro", size: "128GB", price: 16700 },
-                    { id: 42, name: "iPhone 15 Pro", size: "256GB", price: 17700 },
-                    { id: 43, name: "iPhone 15 Pro Max", size: "256GB", price: 18700 }
+                    { id: 9, name: "iPhone 11", size: "64GB", price: 6000 },
+                    { id: 10, name: "iPhone 11", size: "128GB", price: 6400 },
+                    { id: 11, name: "iPhone 11 Pro", size: "64GB", price: 7100 },
+                    { id: 12, name: "iPhone 11 Pro", size: "256GB", price: 7700 },
+                    { id: 13, name: "iPhone 11 Pro Max", size: "256GB", price: 8100 },
+                    { id: 14, name: "iPhone 12", size: "64GB", price: 7700 },
+                    { id: 15, name: "iPhone 12", size: "128GB", price: 8400 },
+                    { id: 16, name: "iPhone 12 Mini", size: "128GB", price: 5700 },
+                    { id: 17, name: "iPhone 12 Pro", size: "128GB", price: 10000 },
+                    { id: 18, name: "iPhone 12 Pro", size: "256GB", price: 10700 },
+                    { id: 19, name: "iPhone 12 Pro Max", size: "128GB", price: 11100 },
+                    { id: 20, name: "iPhone 12 Pro Max", size: "256GB", price: 12100 },
+                    { id: 21, name: "iPhone 13", size: "128GB", price: 9400 },
+                    { id: 22, name: "iPhone 13", size: "256GB", price: 10100 },
+                    { id: 23, name: "iPhone 13 Mini", size: "128GB", price: 7550 },
+                    { id: 24, name: "iPhone 13 Pro", size: "128GB", price: 12100 },
+                    { id: 25, name: "iPhone 13 Pro", size: "256GB", price: 13100 },
+                    { id: 26, name: "iPhone 13 Pro Max", size: "128GB", price: 14200 },
+                    { id: 27, name: "iPhone 13 Pro Max", size: "256GB", price: 15200 },
+                    { id: 28, name: "iPhone 14", size: "128GB", price: 10700 },
+                    { id: 29, name: "iPhone 14", size: "256GB", price: 11700 },
+                    { id: 30, name: "iPhone 14 Plus", size: "128GB", price: 11500 },
+                    { id: 31, name: "iPhone 14 Plus", size: "256GB", price: 12700 },
+                    { id: 32, name: "iPhone 14 Pro", size: "128GB", price: 14700 },
+                    { id: 33, name: "iPhone 14 Pro", size: "256GB", price: 15700 },
+                    { id: 34, name: "iPhone 14 Pro Max", size: "128GB", price: 16700 },
+                    { id: 35, name: "iPhone 14 Pro Max", size: "256GB", price: 17700 },
+                    { id: 36, name: "iPhone 15", size: "128GB", price: 14700 },
+                    { id: 37, name: "iPhone 15", size: "256GB", price: 15700 },
+                    { id: 38, name: "iPhone 15 Plus", size: "128GB", price: 15800 },
+                    { id: 39, name: "iPhone 15 Plus", size: "256GB", price: 16600 },
+                    { id: 40, name: "iPhone 15 Pro", size: "128GB", price: 18100 },
+                    { id: 41, name: "iPhone 15 Pro", size: "256GB", price: 19100 },
+                    { id: 42, name: "iPhone 15 Pro Max", size: "256GB", price: 21200 },
+                    { id: 43, name: "iPhone 15 Pro Max", size: "512GB", price: 24200 }
                 ],
-                init() {},
+                initData() {
+                    gsap.registerPlugin(ScrollTrigger);
+                },
                 get filteredProducts() {
                     return this.products.filter(p => p.name.toLowerCase().includes(this.search.toLowerCase()));
                 },
-                openDetails(p) { this.selectedProduct = p; },
+                openProduct(p) { this.selectedProduct = p; },
                 addToCart(p) {
-                    if(!this.buyer.name) return alert("Full Name required for agreement.");
-                    const item = {...p, cartId: Date.now()};
-                    this.cart.push(item);
+                    if(!this.buyer.name) return alert("Full Name is mandatory.");
+                    this.cart.push({...p, color: this.buyer.color});
                     this.selectedProduct = null;
                     this.showCart = true;
                 },
-                cartCount() { return this.cart.length; },
                 total() { return this.cart.reduce((s, i) => s + i.price, 0); },
-                sendWhatsApp(line) {
+                checkout(line) {
                     const phone = line === 1 ? "27784174780" : "27639699432";
-                    let text = `*ALPINE WORLDWIDE SALES AGREEMENT*%0A%0A`;
-                    text += `*BUYER:* ${this.buyer.name}%0A*DESTINATION:* ${this.buyer.address}%0A%0A`;
-                    this.cart.forEach(i => text += `• ${i.name} (${i.size}) - R${i.price}%0A`);
-                    text += `%0A*TOTAL PAYABLE: R${this.total()}*%0A%0A_Agreement Digitally Signed._`;
-                    window.open(`https://wa.me/${phone}?text=${text}`);
+                    let msg = `*ALPINE WORLDWIDE AGREEMENT*%0A%0ABUYER: ${this.buyer.name}%0AADDRESS: ${this.buyer.address}%0A%0A`;
+                    this.cart.forEach(i => msg += `• ${i.name} (${i.size}) - ${i.color}: R${i.price}%0A`);
+                    msg += `%0ATOTAL: R${this.total()}%0APAYMENT: ${this.buyer.payment}`;
+                    window.open(`https://wa.me/${phone}?text=${msg}`);
                 }
             }
         }
